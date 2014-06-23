@@ -24,7 +24,6 @@ def view(func=None, app=None, serializer=None, **kwargs):
             except Exception as e:
                 app.log_exception(e)
                 response = get_error_response(e)
-            print(response)
             return serializer.after_request(request, response)
         return wrapper
 
