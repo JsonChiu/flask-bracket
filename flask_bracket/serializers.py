@@ -40,7 +40,6 @@ class JsonSerializer(Serializer):
     def before_request(self, request):
         """Deserialize request data as JSON."""
         if request.method in {'POST', 'PUT'}:
-            print(repr(request.data))
             try:
                 request.data = json.load(request.stream)
             except (TypeError, ValueError) as e:
