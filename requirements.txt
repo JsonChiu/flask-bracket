@@ -1,0 +1,2 @@
+flask>=0.10.0
+flask-classy>=0.6.0
