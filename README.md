@@ -2,6 +2,8 @@ Flask-Bracket
 =============
 Minimalist API tools for [Flask][1].
 
+[![Build Status](https://travis-ci.org/WiFast/flask-bracket.svg)](https://travis-ci.org/WiFast/flask-bracket)
+
 License
 -------
 Copyright (c) 2014 WiFast, Inc. This project and all of its contents is licensed under the
