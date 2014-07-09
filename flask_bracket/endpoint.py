@@ -2,6 +2,7 @@
 import inspect
 from .decorators import view
 from flask.ext.classy import FlaskView
+from werkzeug.routing import parse_rule
 
 suffixes = ('Endpoint', 'View')
 
@@ -54,9 +55,10 @@ class Endpoint(FlaskView):
             base_rule = parse_rule(route_base)
             cls.base_args = [r[2] for r in base_rule]
         else:
+            route_base = cls.__name__
             for suffix in suffixes:
-                if cls.__name__.endswith(suffix):
-                    route_base = cls.__name__[:-len(suffix)]
+                if route_base.endswith(suffix):
+                    route_base = route_base[:-len(suffix)]
                     break
             route_base = route_base.lower()
 
