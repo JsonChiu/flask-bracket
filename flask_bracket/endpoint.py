@@ -3,6 +3,8 @@ import inspect
 from .decorators import view
 from flask.ext.classy import FlaskView
 
+suffixes = ('Endpoint', 'View')
+
 
 class EndpointMeta(object):
     """Endpoint metadata class."""
@@ -43,3 +45,19 @@ class Endpoint(FlaskView):
         """Register the view."""
         cls._meta.decorate(cls, app, serializer)
         super(Endpoint, cls).register(app, **kwargs)
+
+    @classmethod
+    def get_route_base(cls):
+        """Returns the route base to use for the current class."""
+        if cls.route_base is not None:
+            route_base = cls.route_base
+            base_rule = parse_rule(route_base)
+            cls.base_args = [r[2] for r in base_rule]
+        else:
+            for suffix in suffixes:
+                if cls.__name__.endswith(suffix):
+                    route_base = cls.__name__[:-len(suffix)]
+                    break
+            route_base = route_base.lower()
+
+        return route_base.strip("/")
