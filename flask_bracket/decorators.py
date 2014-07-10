@@ -25,6 +25,10 @@ def view(func=None, app=None, serializer=None, **kwargs):
                 app.log_exception(e)
                 response = get_error_response(e)
             return serializer.after_request(request, response)
+
+        wrapper.__name__ = func.__name__
+        if hasattr(func, '_rule_cache'):
+            setattr(wrapper, '_rule_cache', func._rule_cache)
         return wrapper
 
     if func:

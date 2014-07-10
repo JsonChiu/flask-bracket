@@ -7,6 +7,30 @@ from werkzeug.routing import parse_rule
 suffixes = ('Endpoint', 'View')
 
 
+def route(rule=None, **options):
+    """
+    A decorator that is used to define custom routes for methods in FlaskView subclasses. The
+    format is exactly the same as Flask's `@app.route` decorator. If ule is absent the name of the
+    decorated function will be used.
+    """
+    options = options.copy()
+    options.update({'rule': rule})
+    def decorator(f):
+        # Put the rule cache on the method itself instead of globally
+        rule = options.pop('rule', None)
+        if not rule:
+            rule = '/{}/'.format(f.__name__)
+        if not hasattr(f, '_rule_cache') or f._rule_cache is None:
+            f._rule_cache = {f.__name__: [(rule, options)]}
+        elif not f.__name__ in f._rule_cache:
+            f._rule_cache[f.__name__] = [(rule, options)]
+        else:
+            f._rule_cache[f.__name__].append((rule, options))
+        return f
+
+    return decorator
+
+
 class EndpointMeta(object):
     """Endpoint metadata class."""
 
