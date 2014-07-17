@@ -14,7 +14,7 @@ class Error(Exception):
     @property
     def response(self):
         """Return the error as a repsonse tuple."""
-        return {'status': self.status, 'error': self.error}, self.status
+        return {'error': self.error}, self.status
 
 
 def get_error_response(error):
