@@ -116,7 +116,6 @@ class ViewTestCase(TestCase):
         else:
             self.assertEqual(view_req, request)
         if isinstance(response, int):
-            self.assertEqual(view_res[0]['status'], response)
             self.assertEqual(view_res[1], response)
         else:
             if isinstance(response, Exception):
@@ -131,17 +130,17 @@ class ViewTestCase(TestCase):
     def test_error(self):
         """View Error"""
         error = Error('test error', 400)
-        want = {'status': 400, 'error': 'test error'}, 400
+        want = {'error': 'test error'}, 400
         self.assertRequest('GET', None, error, want)
 
     def test_abort(self):
         """View Abort"""
         error = 404
-        want = {'status': 404, 'error': 'Not Found'}, 404
+        want = {'error': 'Not Found'}, 404
         self.assertRequest('GET', None, error, want)
 
     def test_unknown_error(self):
         """View Unknown Error"""
         error = Exception('unknown error occurred')
-        want = {'status': 500, 'error': 'internal server error'}, 500
+        want = {'error': 'internal server error'}, 500
         self.assertRequest('GET', None, error, want)
