@@ -57,7 +57,7 @@ class EndpointBuilder(type):
     """Create an API class view."""
 
     def __new__(cls, name, bases, attrs):
-        cls._meta = EndpointMeta(cls, attrs)
+        attrs['_meta'] = EndpointMeta(cls, attrs)
         return type.__new__(cls, name, bases, attrs)
 
 
