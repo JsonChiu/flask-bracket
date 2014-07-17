@@ -15,6 +15,7 @@ def route(rule=None, **options):
     """
     options = options.copy()
     options.update({'rule': rule})
+
     def decorator(f):
         # Put the rule cache on the method itself instead of globally
         rule = options.pop('rule', None)
@@ -22,7 +23,7 @@ def route(rule=None, **options):
             rule = '/{}/'.format(f.__name__)
         if not hasattr(f, '_rule_cache') or f._rule_cache is None:
             f._rule_cache = {f.__name__: [(rule, options)]}
-        elif not f.__name__ in f._rule_cache:
+        elif f.__name__ not in f._rule_cache:
             f._rule_cache[f.__name__] = [(rule, options)]
         else:
             f._rule_cache[f.__name__].append((rule, options))

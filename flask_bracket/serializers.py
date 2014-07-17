@@ -54,7 +54,7 @@ class JsonSerializer(Serializer):
         if not isinstance(response, (list, tuple)):
             response = (response,)
         try:
-            if not isinstance(response[0], (list, tuple, dict)): 
+            if not isinstance(response[0], (list, tuple, dict)):
                 msg = "unable to serialize type {}"
                 raise TypeError(msg.format(response[0].__class__.__name__))
             content = json.dumps(response[0], indent=2)
