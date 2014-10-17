@@ -1,4 +1,5 @@
 """View decorators."""
+import sys
 from .errors import Error, get_error_response
 from .serializers import JsonSerializer
 from flask import current_app, request
@@ -22,7 +23,7 @@ def view(func=None, app=None, serializer=None, **kwargs):
             except (Error, HTTPException) as e:
                 response = get_error_response(e)
             except Exception as e:
-                app.log_exception(e)
+                app.log_exception(sys.exc_info())
                 response = get_error_response(e)
             return serializer.after_request(request, response)
 
