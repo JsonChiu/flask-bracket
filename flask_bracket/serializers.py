@@ -1,5 +1,6 @@
 """Encoder functions."""
 import json
+import sys
 from .errors import Error
 from flask import Response
 
@@ -42,8 +43,8 @@ class JsonSerializer(Serializer):
         if request.method in {'POST', 'PUT'}:
             try:
                 request.data = json.load(request.stream)
-            except (TypeError, ValueError) as e:
-                self.app.log_exception(e)
+            except (TypeError, ValueError):
+                self.app.log_exception(sys.exc_info())
                 raise Error("unable to deserialize request", 400)
         else:
             request.data = None
@@ -60,6 +61,6 @@ class JsonSerializer(Serializer):
             content = json.dumps(response[0], indent=2)
             status = len(response) == 1 and 200 or response[1]
             return Response(content, status=status, content_type=self.content_type)
-        except (TypeError, ValueError) as e:
-            self.app.log_exception(e)
+        except (TypeError, ValueError):
+            self.app.log_exception(sys.exc_info())
             raise Error("unable to serialize response", 500)
