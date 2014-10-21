@@ -15,8 +15,8 @@ class Serializer(object):
     def before_request(self, request):
         """
         Deserialize a request. On POST and PUT methods this will decode the request contents into
-        request.data. On other methods request.data will be set to None. This method requires that
-        request.stream has not already been drained. Raises Error on decode error.
+        request.bracket. On other methods request.bracket will be set to None. This method requires
+        that request.stream has not already been drained. Raises Error on decode error.
         """
         raise NotImplementedError
 
@@ -42,12 +42,12 @@ class JsonSerializer(Serializer):
         """Deserialize request data as JSON."""
         if request.method in {'POST', 'PUT'}:
             try:
-                request.data = json.load(request.stream)
+                request.bracket = request.get_json(force=True)
             except (TypeError, ValueError):
                 self.app.log_exception(sys.exc_info())
                 raise Error("unable to deserialize request", 400)
         else:
-            request.data = None
+            request.bracket = None
         return request
 
     def after_request(self, request, response):

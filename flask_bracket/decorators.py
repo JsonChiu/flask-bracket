@@ -18,6 +18,7 @@ def view(func=None, app=None, serializer=None, **kwargs):
     def decorator(func):
         def wrapper(*args, **kwargs):
             try:
+                request.bracket = None
                 serializer.before_request(request)
                 response = func(*args, **kwargs)
             except (Error, HTTPException) as e:

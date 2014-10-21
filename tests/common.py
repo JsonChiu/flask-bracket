@@ -25,6 +25,10 @@ class MockRequest(object):
         self.data = ''
         self.method = method
 
+    def get_json(self, *args, **kwargs):
+        data = self.stream.read()
+        return json.loads(data)
+
 
 class MockSerializer(JsonSerializer):
     """Mock JsonSerializer that logs method calls."""
@@ -34,11 +38,11 @@ class MockSerializer(JsonSerializer):
         self.reset()
 
     def before_request(self, request):
-        self.before = request.data
+        self.before = request.bracket
         return super(self.__class__, self).before_request(request)
 
     def after_request(self, request, response):
-        self.after = (request.data, response)
+        self.after = (request.bracket, response)
         return super(self.__class__, self).after_request(request, response)
 
     def reset(self):
@@ -67,7 +71,7 @@ class SerializerTestCase(TestCase):
             self.assertRaises(want, serializer.before_request, request)
         else:
             serializer.before_request(request)
-            self.assertEqual(request.data, want)
+            self.assertEqual(request.bracket, want)
 
     def assertAfter(self, serializer, data, want=None, request=None):
         """Validate an after_request call."""
