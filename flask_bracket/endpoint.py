@@ -16,7 +16,7 @@ def route(rule=None, **options):
     options = options.copy()
     options.update({'rule': rule})
 
-    def decorator(f):
+    def decorator(f): # pragma: no cover
         # Put the rule cache on the method itself instead of globally
         rule = options.pop('rule', None)
         if not rule:
